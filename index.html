@@ -1,202 +1,108 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Backgammon Jahr 2025</title>
-  <style>
-    :root {
-      --bg: #f3f4f6;
-      --ink: #111827;
-      --panel: #ffffff;
-      --edge: #d1d5db;
-      --accent: #111827;
-      --muted: #6b7280;
-      --shadow: 0 10px 30px rgba(0,0,0,.08);
-      --radius: 14px;
-    }
-
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
-      background: var(--bg);
-      color: var(--ink);
-      display: grid; place-items: start center; padding: 24px;
-    }
-
-    .app { width: min(100%, 900px); display: grid; gap: 22px; }
-
-    header { text-align: center; display: grid; gap: 8px; }
-    h1 { margin: 0; font-size: clamp(24px, 4vw, 34px); letter-spacing: .2px; }
-    h2 { margin: 0; font-size: clamp(14px, 2.5vw, 18px); color: #b91c1c; }
-    #countdown { font-weight: 700; }
-
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--edge);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 16px; display: grid; gap: 12px;
-    }
-
-    .name { font-weight: 800; font-size: 18px; text-align: center; letter-spacing: .3px; }
-    .score { font-size: clamp(36px, 6vw, 56px); text-align: center; font-weight: 900; }
-
-    .tally-area {
-      min-height: 120px; border: 1px dashed var(--edge); border-radius: 12px; padding: 12px;
-      display: flex; flex-wrap: wrap; align-content: flex-start; gap: 10px;
-      background: repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(17,24,39,.04) 27px, rgba(17,24,39,.04) 28px);
-    }
-
-    /* Strichlisten-Optik */
-    .group5 { width: 56px; height: 48px; position: relative; display: inline-block; }
-    .stick { position: absolute; top: 4px; bottom: 4px; width: 5px; background: #111827; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,.12); }
-    .stick:nth-child(1) { left: 6px; }
-    .stick:nth-child(2) { left: 18px; }
-    .stick:nth-child(3) { left: 30px; }
-    .stick:nth-child(4) { left: 42px; }
-    .slash {
-      position: absolute;
-      top: 4px;
-      left: 0;
-      right: 0;
-      height: 5px;
-      background: #ef4444;
-      border-radius: 4px;
-      transform: rotate(-55deg);
-      transform-origin: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,.12);
-    }
-
-    .single { width: 7px; height: 40px; background: #111827; border-radius: 4px; margin: 4px 6px; box-shadow: 0 2px 6px rgba(0,0,0,.12); display: inline-block; }
-
-    .controls { display: flex; justify-content: center; gap: 10px; }
-    .btn-ghost { background: #111827; color: #fff; border: 0; border-radius: 10px; padding: 10px 14px; cursor: pointer; box-shadow: var(--shadow); }
-
-    footer { text-align: center; color: var(--muted); font-size: 12px; }
-    kbd { background: #e5e7eb; border: 1px solid #cbd5e1; border-radius: 6px; padding: 2px 6px; }
-  </style>
+<meta charset="UTF-8">
+<title>Backgammon Jahr 2025</title>
+<style>
+  body { font-family: Arial; text-align:center; margin:20px; }
+  h1 { font-size:2em; }
+  .player { margin: 20px; }
+  .striche { font-size: 2em; letter-spacing:10px; }
+  button { font-size:1em; padding:5px 10px; margin:5px; }
+</style>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <h1>Backgammon Jahr 2025</h1>
-      <h2>Die Uhr Tickt.. bald zweiter Geburtstag</h2>
-      <div id="countdown"></div>
-    </header>
 
-    <div class="grid">
-      <section class="card" data-player="a">
-        <div class="name">Muli</div>
-        <div class="score" id="scoreA">0</div>
-        <div class="tally-area" id="tallyA" aria-live="polite"></div>
-        <div class="controls">
-          <button class="btn-ghost" data-target="a">+1 Punkt</button>
-        </div>
-      </section>
+<h1>Backgammon Jahr 2025</h1>
+<h2 id="countdown">Die Uhr Tickt..bald zweiter Geburtstag</h2>
 
-      <section class="card" data-player="b">
-        <div class="name">Rinora</div>
-        <div class="score" id="scoreB">0</div>
-        <div class="tally-area" id="tallyB" aria-live="polite"></div>
-        <div class="controls">
-          <button class="btn-ghost" data-target="b">+1 Punkt</button>
-        </div>
-      </section>
-    </div>
+<div class="player">
+  <h3>Muli</h3>
+  <div id="muli" class="striche"> </div>
+  <button onclick="addPoint('muli')">+1</button>
+</div>
 
-    <footer>
-      Passwörter sind erforderlich: erst <kbd>Muli</kbd>, dann <kbd>Rinora</kbd>. Fortschritt wird lokal gespeichert. Zurücksetzen ist nicht erlaubt.
-    </footer>
-  </div>
+<div class="player">
+  <h3>Rinora</h3>
+  <div id="rinora" class="striche"> </div>
+  <button onclick="addPoint('rinora')">+1</button>
+</div>
 
-  <script>
-    const state = { a: 0, b: 0 };
+<!-- Firebase SDK via Module -->
+<script type="module">
+  // ----- Import der SDK-Funktionen -----
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-app.js";
+  import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-database.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-analytics.js";
 
-    const scoreA = document.getElementById('scoreA');
-    const scoreB = document.getElementById('scoreB');
-    const tallyA = document.getElementById('tallyA');
-    const tallyB = document.getElementById('tallyB');
+  // ----- Firebase Konfiguration -----
+  const firebaseConfig = {
+    apiKey: "AIzaSyXne9JncLUdMtDLq0WIpQg_k-aegkTZQ",
+    authDomain: "spiel-db95f.firebaseapp.com",
+    projectId: "spiel-db95f",
+    storageBucket: "spiel-db95f.firebasestorage.app",
+    messagingSenderId: "895764009420",
+    appId: "1:895764009420:web:4b41b5a8921accf3d74d69",
+    measurementId: "G-BWDTKVZNZK"
+  };
 
-    const PASSWORDS = { a: 'muli123', b: 'rinora123' };
+  // ----- Initialize Firebase -----
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getDatabase(app);
 
-    function save() {
-      localStorage.setItem('backgammon_2025_v2', JSON.stringify(state));
-    }
-    function load() {
-      try {
-        const saved = JSON.parse(localStorage.getItem('backgammon_2025_v2'));
-        if (saved) { state.a = saved.a || 0; state.b = saved.b || 0; }
-      } catch {}
-    }
+  // ----- State -----
+  let scores = { muli:0, rinora:0 };
 
-    function makeGroup5() {
-      const g = document.createElement('div');
-      g.className = 'group5';
-      for (let i = 0; i < 4; i++) {
-        const s = document.createElement('div');
-        s.className = 'stick';
-        g.appendChild(s);
-      }
-      const slash = document.createElement('div');
-      slash.className = 'slash';
-      g.appendChild(slash);
-      return g;
-    }
-    function makeSingle() {
-      const s = document.createElement('div');
-      s.className = 'single';
-      return s;
-    }
-    function renderTally(container, value) {
-      container.innerHTML = '';
-      const groups = Math.floor(value / 5);
-      const rest = value % 5;
-      for (let i = 0; i < groups; i++) container.appendChild(makeGroup5());
-      for (let i = 0; i < rest; i++) container.appendChild(makeSingle());
-    }
-
-    function render() {
-      scoreA.textContent = state.a;
-      scoreB.textContent = state.b;
-      renderTally(tallyA, state.a);
-      renderTally(tallyB, state.b);
-      save();
-    }
-
-    function addPoint(player) {
-      const pwA = prompt('Passwort für Muli eingeben:');
-      if (pwA !== PASSWORDS.a) { if (pwA !== null) alert('Falsches Passwort für Muli!'); return; }
-      const pwB = prompt('Passwort für Rinora eingeben:');
-      if (pwB !== PASSWORDS.b) { if (pwB !== null) alert('Falsches Passwort für Rinora!'); return; }
-      state[player]++;
-      render();
-    }
-
-    document.querySelectorAll('.btn-ghost').forEach(btn => {
-      btn.addEventListener('click', () => addPoint(btn.dataset.target));
-    });
-
-    load();
+  // ----- Realtime Listener -----
+  const scoresRef = ref(db, 'scores');
+  onValue(scoresRef, snapshot => {
+    scores = snapshot.val() || { muli:0, rinora:0 };
     render();
+  });
 
-    // Countdown zur nächsten Silvester
-    function updateCountdown() {
-      const now = new Date();
-      const next = new Date(now.getFullYear() + 1, 0, 1);
-      const diff = next - now;
-      const d = Math.floor(diff / (1000*60*60*24));
-      const h = Math.floor((diff / (1000*60*60)) % 24);
-      const m = Math.floor((diff / (1000*60)) % 60);
-      const s = Math.floor((diff / 1000) % 60);
-      document.getElementById('countdown').textContent = `${d}d ${h}h ${m}m ${s}s`; 
+  // ----- Render Strichliste -----
+  function render() {
+    document.getElementById('muli').textContent = getStriche(scores.muli);
+    document.getElementById('rinora').textContent = getStriche(scores.rinora);
+  }
+
+  function getStriche(n) {
+    let result = '';
+    for(let i=1; i<=n; i++){
+      result += '|';
+      if(i%5===0) result += ' '; // 5er Gruppe optisch trennen
     }
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-  </script>
+    return result;
+  }
+
+  // ----- Punkte hinzufügen mit Passwort -----
+  window.addPoint = function(player) {
+    const pwMuli = prompt("Passwort für Muli:");
+    if(pwMuli !== "muli123") { alert("Falsches Passwort!"); return; }
+    const pwRinora = prompt("Passwort für Rinora:");
+    if(pwRinora !== "rinora123") { alert("Falsches Passwort!"); return; }
+
+    const playerRef = ref(db, 'scores/' + player);
+    runTransaction(playerRef, current => (current||0)+1);
+  }
+
+  // ----- Countdown -----
+  function updateCountdown() {
+    const now = new Date();
+    const newYear = new Date('2026-01-01T00:00:00');
+    let diff = newYear - now;
+    if(diff<0) diff=0;
+    const days = Math.floor(diff/1000/60/60/24);
+    const hours = Math.floor((diff/1000/60/60)%24);
+    const mins = Math.floor((diff/1000/60)%60);
+    const secs = Math.floor((diff/1000)%60);
+    document.getElementById('countdown').textContent =
+      `Die Uhr Tickt..bald zweiter Geburtstag: ${days}d ${hours}h ${mins}m ${secs}s`;
+  }
+  setInterval(updateCountdown,1000);
+  updateCountdown();
+
+</script>
 </body>
 </html>
